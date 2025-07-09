@@ -64,6 +64,7 @@ function initializeApp() {
     setupFloatingAssistant();
     setupSettingsButton();
     setupSubjectDetail();
+    setupAIChat();
     
     // Configurar missatges motivacionals
     startMotivationalMessages();
@@ -113,22 +114,24 @@ function setupSubjectDetail() {
                 </div>
             </div>
             <div class="ai-chat">
-                <h3>🤖 Assistent IA Especialitzat</h3>
+                <h3>🤖 Assistent IA SÚPER INTEL·LIGENT</h3>
                 <div class="chat-messages" id="chat-messages">
                     <div class="message ai">
-                        <p><strong>🎯 IA ESPECIALITZADA EN ELS TEUS ESTUDIS</strong><br><br>
-                        Hola! Sóc la teva IA d'estudi completament reprogramada i SÚPER INTEL·LIGENT. 
+                        <p>🧠 Hola! Sóc la teva IA d'estudi COMPLETAMENT REPROGRAMADA i SÚPER INTEL·LIGENT! 
                         
-                        <br><br><strong>🧠 EL QUE PUC FER:</strong>
-                        • Analitzar NOMÉS els teus apunts reals
-                        • Crear resums basats exclusivament en els teus temes
-                        • Generar preguntes d'examen del teu contingut específic
-                        • Explicar conceptes que has estudiat
-                        • Crear exercicis personalitzats dels teus apunts
-                        
-                        <br><br><strong>⚠️ IMPORTANT:</strong> NO m'inventaré MAI informació. Només treballaré amb el que has escrit als teus apunts i temes.
-                        
-                        <br><br>Com et puc ajudar amb els teus estudis?</p>
+✨ NOVA FUNCIONALITAT:
+• Analitzo TOTS els teus apunts i temes
+• Genero resums NOMÉS del teu contingut
+• Creo preguntes basades en els teus estudis
+• NO m'invento res - només treballo amb les teves dades
+
+🎯 Pots demanar-me:
+• "Fes un resum del tema 1 i 2"
+• "Genera preguntes d'examen"
+• "Explica [concepte dels teus apunts]"
+• "Crea exercicis de [tema]"
+
+Com et puc ajudar amb els teus estudis?</p>
                     </div>
                 </div>
                 <div class="chat-input-container">
@@ -141,6 +144,11 @@ function setupSubjectDetail() {
         </div>
     `;
     document.body.appendChild(subjectDetail);
+}
+
+// Configurar chat IA
+function setupAIChat() {
+    // Funcionalitat del chat ja implementada a setupSubjectDetail
 }
 
 // Configurar flashcards
@@ -201,51 +209,7 @@ function openSubjectDetail(subject) {
     // Carregar apunts de l'assignatura
     loadSubjectNotes(subject);
     
-    // Actualitzar missatge inicial de la IA amb informació específica de l'assignatura
-    updateAIWelcomeMessage(subject);
-    
     showFeedback(`Obrint ${subject}... 📖`, 'info');
-}
-
-// NOVA FUNCIÓ: Actualitzar missatge de benvinguda de la IA
-function updateAIWelcomeMessage(subject) {
-    const chatMessages = document.getElementById('chat-messages');
-    if (!chatMessages) return;
-    
-    const subjectData = getSubjectData(subject);
-    const totalNotes = (subjectData.notes.past?.length || 0) + (subjectData.notes.current?.length || 0);
-    const totalThemes = subjectData.themes?.length || 0;
-    
-    // Netejar missatges anteriors
-    chatMessages.innerHTML = '';
-    
-    // Crear nou missatge personalitzat
-    const welcomeMessage = document.createElement('div');
-    welcomeMessage.className = 'message ai';
-    welcomeMessage.innerHTML = `
-        <p><strong>🎯 IA ESPECIALITZADA EN ${subject.toUpperCase()}</strong><br><br>
-        
-        <strong>📊 ANÀLISI DE LES TEVES DADES:</strong><br>
-        • Apunts disponibles: ${totalNotes}<br>
-        • Temes creats: ${totalThemes}<br>
-        • Assignatura: ${subject}<br><br>
-        
-        <strong>🧠 EL QUE PUC FER AMB ELS TEUS APUNTS DE ${subject.toUpperCase()}:</strong><br>
-        ${totalNotes > 0 ? '• Crear resums dels teus apunts específics<br>' : ''}
-        ${totalThemes > 0 ? '• Generar preguntes basades en els teus temes<br>' : ''}
-        ${totalNotes > 0 ? '• Explicar conceptes que has estudiat<br>' : ''}
-        ${totalNotes > 0 ? '• Crear exercicis personalitzats<br>' : ''}
-        ${totalNotes > 0 ? '• Analitzar el teu progrés d\'estudi<br>' : ''}
-        
-        ${totalNotes === 0 ? '<br><strong>⚠️ ATENCIÓ:</strong> Encara no tens apunts de ' + subject + '. Afegeix contingut primer per poder ajudar-te millor!<br>' : ''}
-        
-        <br><strong>🎯 RECORDATORI:</strong> Només treballaré amb la informació que has escrit. No inventaré res!<br><br>
-        
-        Què vols que faci amb els teus estudis de ${subject}?</p>
-    `;
-    
-    chatMessages.appendChild(welcomeMessage);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 // Tancar pantalla d'assignatura
@@ -462,9 +426,6 @@ function saveNote() {
     
     // Recarregar apunts
     loadSubjectNotes(currentSubject);
-    
-    // Actualitzar missatge de benvinguda de la IA amb les noves dades
-    updateAIWelcomeMessage(currentSubject);
 }
 
 // Carregar temes
@@ -535,9 +496,6 @@ function createNewTheme() {
     
     showFeedback('Tema creat correctament! 🎯', 'success');
     loadSubjectNotes(currentSubject);
-    
-    // Actualitzar missatge de benvinguda de la IA
-    updateAIWelcomeMessage(currentSubject);
 }
 
 // Editar tema
@@ -578,9 +536,6 @@ function deleteTheme(themeId) {
         
         showFeedback('Tema eliminat! 🗑️', 'success');
         loadSubjectNotes(currentSubject);
-        
-        // Actualitzar missatge de benvinguda de la IA
-        updateAIWelcomeMessage(currentSubject);
     }
 }
 
@@ -603,9 +558,6 @@ function deleteNote(noteId) {
         
         showFeedback('Apunt eliminat! 🗑️', 'success');
         loadSubjectNotes(currentSubject);
-        
-        // Actualitzar missatge de benvinguda de la IA
-        updateAIWelcomeMessage(currentSubject);
     }
 }
 
@@ -618,20 +570,9 @@ function deleteNoteFromViewer(noteId) {
         if (currentNotes.current) {
             currentNotes.current = currentNotes.current.filter(n => n.id !== noteId);
         }
-        
-        // Guardar canvis
-        if (currentSubject) {
-            const subjectData = getSubjectData(currentSubject);
-            subjectData.notes = currentNotes;
-            saveDataToStorage();
-        }
-        
         showFeedback('Apunt eliminat! 🗑️', 'success');
         closeModal();
         loadSubjectNotes(currentSubject);
-        
-        // Actualitzar missatge de benvinguda de la IA
-        updateAIWelcomeMessage(currentSubject);
     }
 }
 
@@ -726,9 +667,7 @@ function addOCRToNotes(text) {
     showFeedback('Text afegit als apunts! 📝', 'success');
 }
 
-// ============================================================================
-// NOVA IA COMPLETAMENT REPROGRAMADA - SÚPER INTEL·LIGENT I ESPECIALITZADA
-// ============================================================================
+// ===== NOVA IA COMPLETAMENT REPROGRAMADA I SÚPER INTEL·LIGENT =====
 
 // Enviar missatge al chat
 function sendMessage() {
@@ -747,394 +686,277 @@ function sendMessage() {
     
     chatInput.value = '';
     
-    // Mostrar indicador de "pensant"
-    const thinkingMessage = document.createElement('div');
-    thinkingMessage.className = 'message ai thinking';
-    thinkingMessage.innerHTML = '<p>🧠 Analitzant els teus apunts...</p>';
-    chatMessages.appendChild(thinkingMessage);
-    
-    // Scroll al final
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    // Generar resposta intel·ligent de la IA
+    // Simular resposta de la IA SÚPER INTEL·LIGENT
     setTimeout(() => {
-        chatMessages.removeChild(thinkingMessage);
         const aiMessage = document.createElement('div');
         aiMessage.className = 'message ai';
-        aiMessage.innerHTML = `<p>${generateAdvancedAIResponse(message)}</p>`;
+        aiMessage.innerHTML = `<p>${generateSuperIntelligentAIResponse(message)}</p>`;
         chatMessages.appendChild(aiMessage);
         
         // Scroll al final
         chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 1500);
+    }, 1000);
+    
+    // Scroll al final
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// NOVA FUNCIÓ: Generar resposta avançada de la IA
-function generateAdvancedAIResponse(userMessage) {
-    const lowerMessage = userMessage.toLowerCase();
+// NOVA FUNCIÓ: IA SÚPER INTEL·LIGENT COMPLETAMENT REPROGRAMADA
+function generateSuperIntelligentAIResponse(message) {
+    const lowerMessage = message.toLowerCase();
     
-    // Obtenir dades reals de l'assignatura actual
-    const subjectData = getSubjectData(currentSubject || 'General');
-    const allNotes = [...(subjectData.notes.past || []), ...(subjectData.notes.current || [])];
-    const allThemes = subjectData.themes || [];
+    // Obtenir tots els apunts i temes de l'assignatura actual
+    const allNotes = [...(currentNotes.past || []), ...(currentNotes.current || [])];
+    const allThemes = currentThemes || [];
     
     // ANÀLISI INTEL·LIGENT DEL MISSATGE
-    const analysisResult = analyzeUserRequest(lowerMessage, allNotes, allThemes);
+    console.log(`🧠 IA ANALITZANT: "${message}"`);
+    console.log(`📚 Apunts disponibles: ${allNotes.length}`);
+    console.log(`🎯 Temes disponibles: ${allThemes.length}`);
     
-    // Generar resposta basada en l'anàlisi
-    return generateContextualResponse(analysisResult, userMessage, allNotes, allThemes);
-}
-
-// NOVA FUNCIÓ: Analitzar petició de l'usuari
-function analyzeUserRequest(message, notes, themes) {
-    const analysis = {
-        type: 'general',
-        intent: 'unknown',
-        relevantNotes: [],
-        relevantThemes: [],
-        keywords: [],
-        hasData: notes.length > 0
-    };
-    
-    // Detectar tipus de petició
-    if (message.includes('resum') || message.includes('resumeix')) {
-        analysis.type = 'summary';
-        analysis.intent = 'create_summary';
-    } else if (message.includes('pregunta') || message.includes('preguntes') || message.includes('examen')) {
-        analysis.type = 'questions';
-        analysis.intent = 'generate_questions';
-    } else if (message.includes('explica') || message.includes('explicar')) {
-        analysis.type = 'explanation';
-        analysis.intent = 'explain_concept';
-    } else if (message.includes('exercici') || message.includes('exercicis') || message.includes('pràctica')) {
-        analysis.type = 'exercises';
-        analysis.intent = 'create_exercises';
-    } else if (message.includes('tema') && (message.includes('1') || message.includes('2') || message.includes('3'))) {
-        analysis.type = 'theme_specific';
-        analysis.intent = 'theme_analysis';
+    // DETECCIÓ DE RESUMS DE TEMES ESPECÍFICS
+    if (lowerMessage.includes('resum') && (lowerMessage.includes('tema') || lowerMessage.includes('temes'))) {
+        return generateThemeSummary(message, allNotes, allThemes);
     }
     
-    // Buscar notes rellevants
-    analysis.relevantNotes = notes.filter(note => {
-        const noteContent = (note.title + ' ' + note.content).toLowerCase();
-        return message.split(' ').some(word => 
-            word.length > 3 && noteContent.includes(word)
-        );
-    });
+    // DETECCIÓ DE PREGUNTES D'EXAMEN
+    if (lowerMessage.includes('pregunta') || lowerMessage.includes('preguntes') || lowerMessage.includes('examen')) {
+        return generateExamQuestions(allNotes, allThemes);
+    }
     
-    // Buscar temes rellevants
-    analysis.relevantThemes = themes.filter(theme => {
-        const themeContent = (theme.name + ' ' + theme.description).toLowerCase();
-        return message.split(' ').some(word => 
-            word.length > 2 && themeContent.includes(word)
-        );
-    });
+    // DETECCIÓ D'EXPLICACIONS DE CONCEPTES
+    if (lowerMessage.includes('explica') || lowerMessage.includes('explicar') || lowerMessage.includes('què és')) {
+        return explainConcept(message, allNotes);
+    }
     
-    // Detectar temes específics per número
+    // DETECCIÓ DE CREACIÓ D'EXERCICIS
+    if (lowerMessage.includes('exercici') || lowerMessage.includes('exercicis') || lowerMessage.includes('pràctica')) {
+        return generateExercises(message, allNotes, allThemes);
+    }
+    
+    // ANÀLISI CONTEXTUAL AVANÇADA
+    return generateContextualResponse(message, allNotes, allThemes);
+}
+
+// NOVA FUNCIÓ: Generar resums de temes específics
+function generateThemeSummary(message, allNotes, allThemes) {
+    const lowerMessage = message.toLowerCase();
+    
+    // Detectar quins temes es demanen
+    const requestedThemes = [];
+    
+    // Buscar números de tema
     const themeNumbers = message.match(/tema\s*(\d+)/gi);
     if (themeNumbers) {
         themeNumbers.forEach(match => {
             const number = match.match(/\d+/)[0];
-            const theme = themes.find(t => t.name.toLowerCase().includes(number));
-            if (theme && !analysis.relevantThemes.includes(theme)) {
-                analysis.relevantThemes.push(theme);
+            const theme = allThemes.find(t => t.name.toLowerCase().includes(number));
+            if (theme) requestedThemes.push(theme);
+        });
+    }
+    
+    // Si no es troben números, buscar per nom
+    if (requestedThemes.length === 0) {
+        allThemes.forEach(theme => {
+            if (lowerMessage.includes(theme.name.toLowerCase()) || 
+                lowerMessage.includes(theme.description.toLowerCase())) {
+                requestedThemes.push(theme);
             }
         });
     }
     
-    // Extreure paraules clau
-    analysis.keywords = message.split(' ').filter(word => word.length > 3);
-    
-    return analysis;
-}
+    if (requestedThemes.length === 0) {
+        return `⚠️ No he trobat els temes específics que demanes. 
 
-// NOVA FUNCIÓ: Generar resposta contextual
-function generateContextualResponse(analysis, originalMessage, notes, themes) {
-    const subject = currentSubject || 'aquesta assignatura';
-    
-    // Si no hi ha dades, informar a l'usuari
-    if (!analysis.hasData) {
-        return `⚠️ <strong>NO TINC DADES PER TREBALLAR</strong><br><br>
-        Encara no tens apunts de ${subject}. Per poder ajudar-te necessito que:<br><br>
-        1. Escriguis apunts a la pestanya "Escriure apunts"<br>
-        2. Creïs temes per organitzar el contingut<br>
-        3. Afegeixis informació específica dels teus estudis<br><br>
-        <strong>🎯 RECORDATORI:</strong> Només puc treballar amb la informació que tu escrius. No m'inventaré res!`;
-    }
-    
-    // Generar resposta segons el tipus de petició
-    switch (analysis.type) {
-        case 'summary':
-            return generateSummaryResponse(analysis, notes, themes, subject);
-        case 'questions':
-            return generateQuestionsResponse(analysis, notes, themes, subject);
-        case 'explanation':
-            return generateExplanationResponse(analysis, notes, themes, subject);
-        case 'exercises':
-            return generateExercisesResponse(analysis, notes, themes, subject);
-        case 'theme_specific':
-            return generateThemeSpecificResponse(analysis, notes, themes, subject);
-        default:
-            return generateGeneralResponse(analysis, notes, themes, subject, originalMessage);
-    }
-}
+📚 Temes disponibles als teus apunts:
+${allThemes.map(t => `• ${t.name}: ${t.description}`).join('\n')}
 
-// NOVA FUNCIÓ: Generar resum
-function generateSummaryResponse(analysis, notes, themes, subject) {
-    let targetNotes = notes;
-    let summaryTitle = `RESUM GENERAL DE ${subject.toUpperCase()}`;
-    
-    // Si hi ha temes específics, filtrar notes
-    if (analysis.relevantThemes.length > 0) {
-        const themeIds = analysis.relevantThemes.map(t => t.id);
-        targetNotes = notes.filter(note => themeIds.includes(note.theme));
-        summaryTitle = `RESUM DE ${analysis.relevantThemes.map(t => t.name).join(' I ')}`;
+🎯 Pots demanar: "Fes un resum del TEMA 1" o "Resum del tema d'àlgebra"`;
     }
     
-    if (targetNotes.length === 0) {
-        return `⚠️ No he trobat apunts específics per crear aquest resum. Afegeix més contingut als teus apunts.`;
-    }
+    // Generar resum NOMÉS amb els apunts d'aquests temes
+    let summary = `📋 RESUM DELS TEMES DEMANATS (basat exclusivament en els teus apunts):\n\n`;
     
-    // Crear resum estructurat
-    let summary = `📚 <strong>${summaryTitle}</strong><br><br>`;
-    
-    // Agrupar per temes si és possible
-    const groupedNotes = {};
-    targetNotes.forEach(note => {
-        const theme = themes.find(t => t.id === note.theme);
-        const themeName = theme ? theme.name : 'Sense tema';
-        if (!groupedNotes[themeName]) {
-            groupedNotes[themeName] = [];
+    requestedThemes.forEach(theme => {
+        const themeNotes = allNotes.filter(note => note.theme === theme.id);
+        
+        summary += `🎯 ${theme.name}: ${theme.description}\n`;
+        
+        if (themeNotes.length === 0) {
+            summary += `⚠️ No hi ha apunts per aquest tema encara.\n\n`;
+        } else {
+            summary += `📝 Contingut dels teus apunts:\n`;
+            themeNotes.forEach(note => {
+                summary += `• ${note.title}: ${note.content.substring(0, 100)}...\n`;
+            });
+            summary += `\n`;
         }
-        groupedNotes[themeName].push(note);
     });
     
-    // Generar resum per cada grup
-    Object.keys(groupedNotes).forEach(themeName => {
-        summary += `<strong>🎯 ${themeName}:</strong><br>`;
-        groupedNotes[themeName].forEach(note => {
-            const preview = note.content.substring(0, 150) + (note.content.length > 150 ? '...' : '');
-            summary += `• <em>${note.title}</em>: ${preview}<br>`;
-        });
-        summary += '<br>';
-    });
-    
-    summary += `<strong>📊 ESTADÍSTIQUES:</strong><br>`;
-    summary += `• Total apunts analitzats: ${targetNotes.length}<br>`;
-    summary += `• Paraules aproximades: ${targetNotes.reduce((sum, note) => sum + note.content.split(' ').length, 0)}<br>`;
-    summary += `• Període: ${targetNotes[0]?.date} - ${targetNotes[targetNotes.length - 1]?.date}<br><br>`;
-    
-    summary += `<strong>🎯 BASAT EXCLUSIVAMENT EN ELS TEUS APUNTS DE ${subject.toUpperCase()}</strong>`;
+    summary += `✅ Aquest resum està basat EXCLUSIVAMENT en els ${allNotes.length} apunts que has escrit. No he afegit informació externa.`;
     
     return summary;
 }
 
-// NOVA FUNCIÓ: Generar preguntes
-function generateQuestionsResponse(analysis, notes, themes, subject) {
-    let targetNotes = notes;
-    let questionsTitle = `PREGUNTES D'EXAMEN DE ${subject.toUpperCase()}`;
-    
-    // Si hi ha temes específics, filtrar notes
-    if (analysis.relevantThemes.length > 0) {
-        const themeIds = analysis.relevantThemes.map(t => t.id);
-        targetNotes = notes.filter(note => themeIds.includes(note.theme));
-        questionsTitle = `PREGUNTES DE ${analysis.relevantThemes.map(t => t.name).join(' I ')}`;
-    }
-    
-    if (targetNotes.length === 0) {
-        return `⚠️ No puc generar preguntes sense apunts específics. Afegeix contingut primer.`;
-    }
-    
-    let response = `❓ <strong>${questionsTitle}</strong><br><br>`;
-    response += `<strong>🎯 PREGUNTES BASADES EXCLUSIVAMENT EN ELS TEUS APUNTS:</strong><br><br>`;
-    
-    // Generar preguntes intel·ligents basades en el contingut real
-    const questions = generateIntelligentQuestions(targetNotes, themes);
-    
-    questions.forEach((question, index) => {
-        response += `<strong>${index + 1}.</strong> ${question}<br><br>`;
-    });
-    
-    response += `<strong>📚 FONT:</strong> Generat a partir de ${targetNotes.length} apunts de ${subject}<br>`;
-    response += `<strong>⚠️ IMPORTANT:</strong> Totes les preguntes estan basades en el contingut que has estudiat i escrit.`;
-    
-    return response;
-}
+// NOVA FUNCIÓ: Generar preguntes d'examen basades en els apunts
+function generateExamQuestions(allNotes, allThemes) {
+    if (allNotes.length === 0) {
+        return `⚠️ No puc generar preguntes perquè no tens apunts encara. 
 
-// NOVA FUNCIÓ: Generar preguntes intel·ligents
-function generateIntelligentQuestions(notes, themes) {
-    const questions = [];
+📝 Escriu primer els teus apunts i després podré crear preguntes d'examen basades exclusivament en el teu contingut!`;
+    }
     
-    notes.forEach(note => {
+    let questions = `❓ PREGUNTES D'EXAMEN (basades exclusivament en els teus apunts):\n\n`;
+    
+    // Generar preguntes reals basades en el contingut dels apunts
+    allNotes.forEach((note, index) => {
         const content = note.content.toLowerCase();
-        const title = note.title;
         
-        // Preguntes basades en definicions
-        if (content.includes('definició') || content.includes('és') || content.includes('significa')) {
-            questions.push(`Defineix el concepte principal tractat en "${title}".`);
+        // Detectar tipus de contingut i generar preguntes apropiades
+        if (content.includes('fórmula') || content.includes('=')) {
+            questions += `${index + 1}. Quina fórmula apareix als teus apunts de "${note.title}"?\n`;
+        } else if (content.includes('definició') || content.includes('és')) {
+            questions += `${index + 1}. Com defines el concepte principal dels teus apunts de "${note.title}"?\n`;
+        } else if (content.includes('exemple') || content.includes('aplicació')) {
+            questions += `${index + 1}. Quin exemple específic menciones als teus apunts de "${note.title}"?\n`;
+        } else {
+            questions += `${index + 1}. Explica el contingut principal dels teus apunts de "${note.title}" (${note.date}).\n`;
         }
-        
-        // Preguntes basades en fórmules
-        if (content.includes('=') || content.includes('fórmula')) {
-            questions.push(`Explica la fórmula o equació que apareix en els teus apunts de "${title}".`);
-        }
-        
-        // Preguntes basades en exemples
-        if (content.includes('exemple') || content.includes('cas')) {
-            questions.push(`Descriu l'exemple específic que menciones en "${title}".`);
-        }
-        
-        // Preguntes basades en aplicacions
-        if (content.includes('aplicació') || content.includes('utilitzar') || content.includes('serveix')) {
-            questions.push(`Quines aplicacions pràctiques menciones en els teus apunts de "${title}"?`);
-        }
-        
-        // Pregunta general sobre el contingut
-        questions.push(`Explica els punts principals dels teus apunts sobre "${title}".`);
     });
     
-    // Limitar a 8 preguntes màxim i eliminar duplicats
-    return [...new Set(questions)].slice(0, 8);
+    questions += `\n🎯 Totes aquestes preguntes estan basades en els ${allNotes.length} apunts que has escrit. Puc desenvolupar qualsevol d'elles amb més detall!`;
+    
+    return questions;
 }
 
-// NOVA FUNCIÓ: Generar explicació
-function generateExplanationResponse(analysis, notes, themes, subject) {
-    if (analysis.relevantNotes.length === 0) {
-        return `⚠️ No he trobat informació sobre aquest tema als teus apunts de ${subject}. Afegeix contingut específic per poder explicar-te'l.`;
+// NOVA FUNCIÓ: Explicar conceptes NOMÉS dels apunts
+function explainConcept(message, allNotes) {
+    // Extreure el concepte que vol que expliqui
+    const concept = message.replace(/explica|explicar|què és/gi, '').trim();
+    
+    if (!concept) {
+        return `🤔 Quin concepte dels teus apunts vols que t'expliqui? 
+
+📚 Conceptes disponibles als teus apunts:
+${allNotes.map(note => `• ${note.title}`).join('\n')}`;
     }
     
-    const relevantNote = analysis.relevantNotes[0];
-    const theme = themes.find(t => t.id === relevantNote.theme);
+    // Buscar el concepte als apunts
+    const relevantNotes = allNotes.filter(note => 
+        note.title.toLowerCase().includes(concept.toLowerCase()) ||
+        note.content.toLowerCase().includes(concept.toLowerCase())
+    );
     
-    let explanation = `💡 <strong>EXPLICACIÓ BASADA EN ELS TEUS APUNTS</strong><br><br>`;
-    explanation += `<strong>📖 Font:</strong> ${relevantNote.title} (${relevantNote.date})<br>`;
-    if (theme) {
-        explanation += `<strong>🎯 Tema:</strong> ${theme.name} - ${theme.description}<br><br>`;
+    if (relevantNotes.length === 0) {
+        return `⚠️ No he trobat informació sobre "${concept}" als teus apunts.
+
+📝 Afegeix primer contingut sobre aquest tema als teus apunts i després podré explicar-te'l basant-me exclusivament en la teva informació!`;
     }
     
-    explanation += `<strong>📝 CONTINGUT DELS TEUS APUNTS:</strong><br>`;
-    explanation += `${relevantNote.content.replace(/\n/g, '<br>')}<br><br>`;
+    // Generar explicació basada en els apunts
+    let explanation = `💡 EXPLICACIÓ DE "${concept.toUpperCase()}" (basada en els teus apunts):\n\n`;
     
-    // Anàlisi intel·ligent del contingut
-    const wordCount = relevantNote.content.split(' ').length;
-    const hasFormulas = relevantNote.content.includes('=') || relevantNote.content.includes('²');
-    const hasExamples = relevantNote.content.toLowerCase().includes('exemple');
+    relevantNotes.forEach(note => {
+        explanation += `📖 Segons els teus apunts de "${note.title}" (${note.date}):\n`;
+        explanation += `${note.content}\n\n`;
+    });
     
-    explanation += `<strong>🧠 ANÀLISI INTEL·LIGENT:</strong><br>`;
-    explanation += `• Longitud: ${wordCount} paraules<br>`;
-    if (hasFormulas) explanation += `• Conté fórmules o equacions<br>`;
-    if (hasExamples) explanation += `• Inclou exemples pràctics<br>`;
-    
-    explanation += `<br><strong>⚠️ BASAT EXCLUSIVAMENT EN ELS TEUS ESTUDIS DE ${subject.toUpperCase()}</strong>`;
+    explanation += `✅ Aquesta explicació està basada EXCLUSIVAMENT en els teus ${relevantNotes.length} apunts relacionats. No he afegit informació externa.`;
     
     return explanation;
 }
 
-// NOVA FUNCIÓ: Generar exercicis
-function generateExercisesResponse(analysis, notes, themes, subject) {
-    if (analysis.relevantNotes.length === 0) {
-        return `⚠️ No puc crear exercicis sense contingut específic als teus apunts de ${subject}.`;
+// NOVA FUNCIÓ: Generar exercicis basats en els apunts
+function generateExercises(message, allNotes, allThemes) {
+    if (allNotes.length === 0) {
+        return `⚠️ No puc crear exercicis perquè no tens apunts encara.
+
+📝 Escriu primer els teus apunts i després podré generar exercicis personalitzats basats en el teu contingut!`;
     }
     
-    let response = `💪 <strong>EXERCICIS PERSONALITZATS DE ${subject.toUpperCase()}</strong><br><br>`;
-    response += `<strong>🎯 BASATS EN ELS TEUS APUNTS ESPECÍFICS:</strong><br><br>`;
+    let exercises = `💪 EXERCICIS PERSONALITZATS (basats en els teus apunts):\n\n`;
     
-    const exercises = generateCustomExercises(analysis.relevantNotes, themes);
-    
-    exercises.forEach((exercise, index) => {
-        response += `<strong>Exercici ${index + 1}:</strong><br>${exercise}<br><br>`;
-    });
-    
-    response += `<strong>📚 FONT:</strong> Generat a partir dels teus apunts de ${subject}<br>`;
-    response += `<strong>⚠️ IMPORTANT:</strong> Tots els exercicis estan basats en el contingut que has estudiat.`;
-    
-    return response;
-}
-
-// NOVA FUNCIÓ: Generar exercicis personalitzats
-function generateCustomExercises(notes, themes) {
-    const exercises = [];
-    
-    notes.forEach(note => {
-        const content = note.content;
-        const title = note.title;
+    // Generar exercicis basats en el contingut real
+    allNotes.forEach((note, index) => {
+        const content = note.content.toLowerCase();
         
-        // Exercici de definició
-        exercises.push(`Defineix amb les teves pròpies paraules el concepte principal de "${title}" basant-te en els teus apunts.`);
-        
-        // Exercici d'aplicació
-        if (content.toLowerCase().includes('exemple') || content.toLowerCase().includes('aplicació')) {
-            exercises.push(`Crea un exemple nou similar al que apareix als teus apunts de "${title}".`);
+        if (content.includes('fórmula') || content.includes('càlcul')) {
+            exercises += `${index + 1}. Exercici basat en "${note.title}":\n`;
+            exercises += `   Aplica els conceptes dels teus apunts per resoldre un problema similar.\n\n`;
+        } else if (content.includes('definició') || content.includes('concepte')) {
+            exercises += `${index + 1}. Exercici de comprensió de "${note.title}":\n`;
+            exercises += `   Explica amb les teves paraules el contingut dels teus apunts.\n\n`;
+        } else {
+            exercises += `${index + 1}. Exercici pràctic de "${note.title}":\n`;
+            exercises += `   Desenvolupa els punts clau que has escrit als teus apunts.\n\n`;
         }
-        
-        // Exercici de síntesi
-        exercises.push(`Fes un esquema o mapa conceptual del contingut dels teus apunts sobre "${title}".`);
     });
     
-    return exercises.slice(0, 5); // Màxim 5 exercicis
+    exercises += `🎯 Aquests exercicis estan dissenyats específicament basant-me en els teus ${allNotes.length} apunts. Puc desenvolupar qualsevol d'ells amb més detall!`;
+    
+    return exercises;
 }
 
-// NOVA FUNCIÓ: Resposta específica per tema
-function generateThemeSpecificResponse(analysis, notes, themes, subject) {
-    if (analysis.relevantThemes.length === 0) {
-        return `⚠️ No he trobat el tema específic als teus estudis de ${subject}.`;
-    }
+// NOVA FUNCIÓ: Resposta contextual intel·ligent
+function generateContextualResponse(message, allNotes, allThemes) {
+    const lowerMessage = message.toLowerCase();
     
-    const theme = analysis.relevantThemes[0];
-    const themeNotes = notes.filter(note => note.theme === theme.id);
+    // Estadístiques dels apunts
+    const totalWords = allNotes.reduce((sum, note) => sum + note.content.split(' ').length, 0);
+    const recentNotes = allNotes.slice(-3);
     
-    if (themeNotes.length === 0) {
-        return `⚠️ El tema "${theme.name}" existeix però no té apunts associats. Afegeix contingut primer.`;
-    }
-    
-    let response = `🎯 <strong>ANÀLISI DEL ${theme.name.toUpperCase()}</strong><br><br>`;
-    response += `<strong>📋 Descripció:</strong> ${theme.description}<br>`;
-    response += `<strong>📚 Apunts disponibles:</strong> ${themeNotes.length}<br><br>`;
-    
-    response += `<strong>📝 CONTINGUT DEL TEMA:</strong><br>`;
-    themeNotes.forEach(note => {
-        response += `• <strong>${note.title}</strong> (${note.date})<br>`;
-        response += `  ${note.content.substring(0, 100)}...<br><br>`;
-    });
-    
-    const totalWords = themeNotes.reduce((sum, note) => sum + note.content.split(' ').length, 0);
-    response += `<strong>📊 ESTADÍSTIQUES:</strong><br>`;
-    response += `• Total paraules: ${totalWords}<br>`;
-    response += `• Apunts: ${themeNotes.length}<br><br>`;
-    
-    response += `<strong>⚠️ INFORMACIÓ BASADA EXCLUSIVAMENT EN ELS TEUS APUNTS</strong>`;
-    
-    return response;
-}
+    // Respostes contextuals intel·ligents
+    if (lowerMessage.includes('hola') || lowerMessage.includes('ajuda')) {
+        return `👋 Hola! Sóc la teva IA d'estudi COMPLETAMENT REPROGRAMADA i SÚPER INTEL·LIGENT!
 
-// NOVA FUNCIÓ: Resposta general intel·ligent
-function generateGeneralResponse(analysis, notes, themes, subject, originalMessage) {
-    let response = `🤖 <strong>ANÀLISI DE LA TEVA PETICIÓ</strong><br><br>`;
-    
-    response += `<strong>📊 ESTAT ACTUAL DE ${subject.toUpperCase()}:</strong><br>`;
-    response += `• Apunts disponibles: ${notes.length}<br>`;
-    response += `• Temes creats: ${themes.length}<br>`;
-    response += `• Paraules totals: ${notes.reduce((sum, note) => sum + note.content.split(' ').length, 0)}<br><br>`;
-    
-    if (analysis.relevantNotes.length > 0) {
-        response += `<strong>🔍 HE TROBAT INFORMACIÓ RELLEVANT:</strong><br>`;
-        analysis.relevantNotes.slice(0, 3).forEach(note => {
-            response += `• ${note.title} (${note.date})<br>`;
-        });
-        response += '<br>';
+📊 ESTAT ACTUAL DELS TEUS ESTUDIS:
+• ${allNotes.length} apunts guardats (~${totalWords} paraules)
+• ${allThemes.length} temes organitzats
+• Assignatura actual: ${currentSubject || 'No seleccionada'}
+
+🎯 FUNCIONALITATS INTEL·LIGENTS:
+• Resums de temes específics
+• Preguntes d'examen personalitzades  
+• Explicacions de conceptes
+• Exercicis basats en els teus apunts
+• Anàlisi contextual avançada
+
+⚠️ IMPORTANT: Només treballo amb la informació dels teus apunts. No m'invento res!
+
+Com et puc ajudar amb els teus estudis?`;
     }
     
-    response += `<strong>💡 EL QUE PUC FER AMB ELS TEUS APUNTS:</strong><br>`;
-    response += `• "Fes un resum del tema 1" - Resum específic<br>`;
-    response += `• "Genera preguntes d'examen" - Preguntes dels teus apunts<br>`;
-    response += `• "Explica [concepte]" - Explicació basada en els teus estudis<br>`;
-    response += `• "Crea exercicis" - Exercicis personalitzats<br><br>`;
+    if (lowerMessage.includes('estadístiques') || lowerMessage.includes('progrés')) {
+        return `📊 ESTADÍSTIQUES DELS TEUS ESTUDIS:
+
+📚 Contingut total:
+• ${allNotes.length} apunts guardats
+• ${totalWords} paraules escrites
+• ${allThemes.length} temes organitzats
+
+📝 Apunts recents:
+${recentNotes.map(note => `• ${note.title} (${note.date})`).join('\n')}
+
+🎯 Temes disponibles:
+${allThemes.map(theme => `• ${theme.name}: ${theme.description}`).join('\n')}
+
+✅ Tota aquesta informació està basada en els teus estudis reals!`;
+    }
     
-    response += `<strong>🎯 RECORDATORI:</strong> Només treballaré amb la informació que has escrit. No inventaré res!<br><br>`;
-    
-    response += `Què vols que faci específicament amb els teus estudis de ${subject}?`;
-    
-    return response;
+    // Resposta intel·ligent per defecte
+    return `🧠 Pregunta interessant! Com a IA SÚPER INTEL·LIGENT especialitzada en els teus estudis, puc ajudar-te amb:
+
+📋 RESUMS: "Fes un resum del tema 1 i 2"
+❓ PREGUNTES: "Genera preguntes d'examen"  
+💡 EXPLICACIONS: "Explica [concepte dels teus apunts]"
+💪 EXERCICIS: "Crea exercicis de [tema]"
+📊 ANÀLISI: "Estadístiques dels meus estudis"
+
+📚 Tinc accés a ${allNotes.length} apunts i ${allThemes.length} temes de ${currentSubject || 'aquesta assignatura'}.
+
+⚠️ RECORDATORI: Només treballo amb la informació que has escrit als teus apunts. No m'invento res!
+
+Què vols que faci?`;
 }
 
 // Processar imatge per la IA
@@ -1156,33 +978,45 @@ function processAIImage(event) {
     // Simular processament de la IA
     const processingMessage = document.createElement('div');
     processingMessage.className = 'message ai';
-    processingMessage.innerHTML = '<p>🔍 Analitzant la imatge amb IA especialitzada...</p>';
+    processingMessage.innerHTML = '<p>🔍 Analitzant la imatge amb IA SÚPER INTEL·LIGENT...</p>';
     chatMessages.appendChild(processingMessage);
     
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
     // Simular resposta intel·ligent de la IA
     setTimeout(() => {
-        const subjectData = getSubjectData(currentSubject || 'General');
-        const totalNotes = (subjectData.notes.past?.length || 0) + (subjectData.notes.current?.length || 0);
-        
-        processingMessage.innerHTML = `
-            <p><strong>📸 ANÀLISI D'IMATGE COMPLETADA</strong><br><br>
-            
-            He processat la teva imatge amb la meva IA especialitzada en estudis.<br><br>
-            
-            <strong>🧠 EL QUE PUC FER:</strong><br>
-            • Extreure text de la imatge per afegir als teus apunts<br>
-            • Analitzar fórmules o diagrames<br>
-            • Relacionar el contingut amb els teus ${totalNotes} apunts existents<br>
-            • Crear preguntes basades en el contingut visual<br><br>
-            
-            <strong>🎯 IMPORTANT:</strong> Només treballaré amb el que veig a la imatge i els teus apunts reals.<br><br>
-            
-            Què vols que faci amb aquesta imatge? Puc extreure el text, explicar conceptes que hi apareguin, o relacionar-ho amb els teus estudis de ${currentSubject || 'aquesta assignatura'}.</p>
-        `;
+        processingMessage.innerHTML = generateSuperIntelligentImageResponse(file.name);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 2000);
+}
+
+// NOVA FUNCIÓ: Resposta intel·ligent per imatges
+function generateSuperIntelligentImageResponse(fileName) {
+    const allNotes = [...(currentNotes.past || []), ...(currentNotes.current || [])];
+    const allThemes = currentThemes || [];
+    
+    return `📸 ANÀLISI INTEL·LIGENT DE LA IMATGE COMPLETADA!
+
+🧠 He processat la imatge i puc ajudar-te a:
+
+📝 INTEGRACIÓ AMB ELS TEUS APUNTS:
+• Extreure text de la imatge i afegir-lo als teus ${allNotes.length} apunts
+• Relacionar el contingut amb els teus ${allThemes.length} temes existents
+• Crear apunts estructurats basats en el contingut visual
+
+💡 ANÀLISI CONTEXTUAL:
+• Explicar conceptes que apareguin a la imatge
+• Generar preguntes basades en el contingut visual
+• Crear exercicis relacionats amb la informació
+
+🎯 CONNEXIÓ AMB ELS TEUS ESTUDIS:
+• Vincular amb els teus apunts de ${currentSubject || 'aquesta assignatura'}
+• Identificar relacions amb els teus temes existents
+• Suggerir on encaixa millor aquesta informació
+
+⚠️ IMPORTANT: Només treballaré amb la informació real de la imatge i la relacionaré amb els teus apunts existents. No inventaré contingut!
+
+Què vols que faci amb aquesta imatge?`;
 }
 
 // Manejar tecla Enter al chat
